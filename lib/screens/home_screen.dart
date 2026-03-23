@@ -69,11 +69,16 @@ class _HomeScreenState extends State<HomeScreen> {
                             fontSize: 26, fontWeight: FontWeight.w900)),
                     if (_profile != null) ...[
                       const SizedBox(height: 6),
-                      Row(children: [
-                        _MiniTag(label: _profile!.fitnessGoal, color: AppTheme.primary),
-                        const SizedBox(width: 6),
-                        _MiniTag(label: _profile!.fitnessLevel, color: AppTheme.secondary),
-                      ]),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(children: [
+                          ..._profile!.fitnessGoals.map((g) => Padding(
+                            padding: const EdgeInsets.only(right: 6),
+                            child: _MiniTag(label: g, color: AppTheme.primary),
+                          )),
+                          _MiniTag(label: _profile!.fitnessLevel, color: AppTheme.secondary),
+                        ]),
+                      ),
                     ],
                   ],
                 ),
@@ -85,11 +90,13 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.all(20),
             sliver: SliverList(delegate: SliverChildListDelegate([
 
+              // ── BMI Card ──
               if (_profile != null) ...[
                 _buildBmiCard(_profile!),
                 const SizedBox(height: 20),
               ],
 
+              // ── Stats ──
               Row(children: [
                 _StatCard(label: 'Streak',     value: '$streak 🔥', color: Colors.orange),
                 const SizedBox(width: 12),

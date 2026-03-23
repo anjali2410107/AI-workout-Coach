@@ -5,7 +5,7 @@ class UserProfile {
   final int age;
   final double weight;
   final double height;
-  final String fitnessGoal;
+  final String fitnessGoal; // comma-separated e.g. "Build Muscle, Lose Weight"
   final String fitnessLevel;
 
   UserProfile({
@@ -16,6 +16,9 @@ class UserProfile {
     required this.fitnessGoal,
     required this.fitnessLevel,
   });
+
+  List<String> get fitnessGoals => fitnessGoal.split(', ');
+  String get primaryGoal => fitnessGoals.first;
 
   double get bmi => weight / ((height / 100) * (height / 100));
 

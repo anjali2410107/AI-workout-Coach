@@ -16,11 +16,12 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
   int _currentStep = 0;
   bool _saving = false;
 
+  // Form values
   final _nameController = TextEditingController();
   int _age = 22;
   double _weight = 70;
   double _height = 170;
-  String _fitnessGoal = 'Build Muscle';
+  List<String> _fitnessGoals = ['Build Muscle'];
   String _fitnessLevel = 'Beginner';
 
   final _goals = ['Build Muscle', 'Lose Weight', 'Improve Endurance', 'Stay Active', 'Increase Flexibility'];
@@ -71,7 +72,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
       age: _age,
       weight: _weight,
       height: _height,
-      fitnessGoal: _fitnessGoal,
+      fitnessGoal: _fitnessGoals.join(', '),
       fitnessLevel: _fitnessLevel,
     );
     await UserProfileService.saveProfile(profile);
@@ -179,6 +180,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
     );
   }
 
+  // ── Step 1: Name ──
   Widget _buildNameStep() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
@@ -215,6 +217,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
     );
   }
 
+  // ── Step 2: Body Metrics ──
   Widget _buildBodyStep() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
@@ -290,13 +293,30 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
       ]),
     );
   }
+
+  // ── Step 3: Goal ──
   Widget _buildGoalStep() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
-      child: Column(children: [
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: AppTheme.primary.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: AppTheme.primary.withOpacity(0.3)),
+          ),
+          child: Row(children: [
+            const Icon(Icons.info_outline_rounded, color: AppTheme.primary, size: 16),
+            const SizedBox(width: 8),
+            const Text('Select all that apply',
+                style: TextStyle(color: AppTheme.primary, fontSize: 12, fontWeight: FontWeight.w600)),
+          ]),
+        ),
+        const SizedBox(height: 16),
         ...List.generate(_goals.length, (i) {
           final goal = _goals[i];
-          final selected = _fitnessGoal == goal;
+          final selected = _fitnessGoals.contains(goal);
           final icons = [
             Icons.fitness_center_rounded,
             Icons.monitor_weight_rounded,
@@ -305,7 +325,13 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
             Icons.accessibility_new_rounded,
           ];
           return GestureDetector(
-            onTap: () => setState(() => _fitnessGoal = goal),
+            onTap: () => setState(() {
+              if (selected) {
+                if (_fitnessGoals.length > 1) _fitnessGoals.remove(goal);
+              } else {
+                _fitnessGoals.add(goal);
+              }
+            }),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
               margin: const EdgeInsets.only(bottom: 10),
@@ -329,8 +355,21 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                     color: selected ? AppTheme.white : AppTheme.grey,
                     fontSize: 15, fontWeight: selected ? FontWeight.w700 : FontWeight.w500)),
                 const Spacer(),
-                if (selected)
-                  const Icon(Icons.check_circle_rounded, color: AppTheme.primary, size: 22),
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  width: 24, height: 24,
+                  decoration: BoxDecoration(
+                    color: selected ? AppTheme.primary : Colors.transparent,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: selected ? AppTheme.primary : AppTheme.border,
+                      width: 2,
+                    ),
+                  ),
+                  child: selected
+                      ? const Icon(Icons.check_rounded, color: Colors.white, size: 14)
+                      : null,
+                ),
               ]),
             ),
           );
@@ -339,6 +378,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
     );
   }
 
+  // ── Step 4: Level ──
   Widget _buildLevelStep() {
     final descriptions = {
       'Beginner': 'Less than 6 months of training. New to structured workouts.',
