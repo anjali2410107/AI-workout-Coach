@@ -48,7 +48,6 @@ class _WorkoutPlanScreenState extends State<WorkoutPlanScreen> {
         padding: const EdgeInsets.all(20),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
 
-          // ── Header ──
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -73,7 +72,6 @@ class _WorkoutPlanScreenState extends State<WorkoutPlanScreen> {
 
           const SizedBox(height: 24),
 
-          // ── Fitness Level ──
           _SectionLabel(label: 'Fitness Level'),
           const SizedBox(height: 10),
           Row(children: _levels.map((l) => Expanded(child: Padding(
@@ -87,7 +85,6 @@ class _WorkoutPlanScreenState extends State<WorkoutPlanScreen> {
 
           const SizedBox(height: 20),
 
-          // ── Goal ──
           _SectionLabel(label: 'Your Goal'),
           const SizedBox(height: 10),
           Wrap(spacing: 8, runSpacing: 8, children: _goals.map((g) => _ChoiceChip(
@@ -98,7 +95,6 @@ class _WorkoutPlanScreenState extends State<WorkoutPlanScreen> {
 
           const SizedBox(height: 20),
 
-          // ── Days per week ──
           _SectionLabel(label: 'Days per Week: $_daysPerWeek'),
           Slider(
             value: _daysPerWeek.toDouble(),
@@ -130,7 +126,6 @@ class _WorkoutPlanScreenState extends State<WorkoutPlanScreen> {
 
           const SizedBox(height: 28),
 
-          // ── Generate button ──
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
@@ -145,9 +140,7 @@ class _WorkoutPlanScreenState extends State<WorkoutPlanScreen> {
 
           const SizedBox(height: 28),
 
-          // ── Generated plan ──
           if (_plan != null) ...[
-            // AI Advice card
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -175,7 +168,6 @@ class _WorkoutPlanScreenState extends State<WorkoutPlanScreen> {
                 color: AppTheme.white, fontSize: 20, fontWeight: FontWeight.w900)),
             const SizedBox(height: 16),
 
-            // Days
             ..._plan!.days.map((day) => _DayCard(day: day)),
           ],
         ]),

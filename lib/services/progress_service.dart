@@ -35,7 +35,6 @@ class WorkoutSession {
 class ProgressService {
   final Box _box = Hive.box('progress');
 
-  // ── Save a completed workout session ─────────────────────
   Future<void> saveSession(WorkoutSession session) async {
     final sessions = _getSessions();
     sessions.add(session.toMap());

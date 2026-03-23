@@ -31,7 +31,6 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
       ),
       body: Column(children: [
 
-        // ── Category filter ──
         SizedBox(
           height: 50,
           child: ListView.builder(
@@ -68,7 +67,6 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
 
         const SizedBox(height: 8),
 
-        // ── Exercise list ──
         Expanded(
           child: ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -130,7 +128,6 @@ class _ExerciseCard extends StatelessWidget {
 
           const SizedBox(height: 10),
 
-          // Muscles
           Wrap(spacing: 6, children: exercise.muscles.map((m) =>
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -145,7 +142,6 @@ class _ExerciseCard extends StatelessWidget {
 
           const SizedBox(height: 12),
 
-          // Start button
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
