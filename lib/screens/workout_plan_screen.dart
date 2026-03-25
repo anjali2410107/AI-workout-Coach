@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../services/gemini_service.dart';
+import '../services/groq_service.dart';
 import '../theme/app_theme.dart';
 
 class WorkoutPlanScreen extends StatefulWidget {
@@ -11,7 +11,7 @@ class WorkoutPlanScreen extends StatefulWidget {
 }
 
 class _WorkoutPlanScreenState extends State<WorkoutPlanScreen> {
-  final _gemini = GeminiService();
+  final _groq = GroqService();
 
   String _fitnessLevel = 'Beginner';
   String _goal = 'Build Muscle';
@@ -27,7 +27,7 @@ class _WorkoutPlanScreenState extends State<WorkoutPlanScreen> {
 
   Future<void> _generatePlan() async {
     setState(() { _loading = true; _plan = null; });
-    final plan = await _gemini.generateWorkoutPlan(
+    final plan = await _groq.generateWorkoutPlan(
       fitnessLevel: _fitnessLevel,
       goal: _goal,
       daysPerWeek: _daysPerWeek,
@@ -61,7 +61,7 @@ class _WorkoutPlanScreenState extends State<WorkoutPlanScreen> {
               const Icon(Icons.auto_awesome_rounded, color: AppTheme.primary, size: 28),
               const SizedBox(width: 12),
               Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                const Text('Powered by Gemini AI',
+                const Text('Powered by Groq AI',
                     style: TextStyle(color: AppTheme.white,
                         fontSize: 15, fontWeight: FontWeight.w800)),
                 Text('Tell us about yourself and get a personalized plan',
@@ -105,7 +105,6 @@ class _WorkoutPlanScreenState extends State<WorkoutPlanScreen> {
           ),
 
           const SizedBox(height: 20),
-
 
           _SectionLabel(label: 'Focus Areas'),
           const SizedBox(height: 10),

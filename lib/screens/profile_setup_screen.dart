@@ -16,7 +16,6 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
   int _currentStep = 0;
   bool _saving = false;
 
-  // Form values
   final _nameController = TextEditingController();
   int _age = 22;
   double _weight = 70;
@@ -180,7 +179,6 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
     );
   }
 
-  // ── Step 1: Name ──
   Widget _buildNameStep() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
@@ -217,7 +215,6 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
     );
   }
 
-  // ── Step 2: Body Metrics ──
   Widget _buildBodyStep() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
@@ -294,7 +291,6 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
     );
   }
 
-  // ── Step 3: Goal ──
   Widget _buildGoalStep() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
@@ -378,7 +374,6 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
     );
   }
 
-  // ── Step 4: Level ──
   Widget _buildLevelStep() {
     final descriptions = {
       'Beginner': 'Less than 6 months of training. New to structured workouts.',

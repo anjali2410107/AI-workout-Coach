@@ -137,7 +137,7 @@ class _SplashScreenState extends State<SplashScreen>
                     ))),
                 const SizedBox(height: 16),
                 FadeTransition(opacity: _subFade, child: SlideTransition(position: _subSlide,
-                    child: Text('Powered by Gemini AI · ML Pose Detection', textAlign: TextAlign.center,
+                    child: Text('Powered by Groq AI · ML Pose Detection', textAlign: TextAlign.center,
                         style: TextStyle(color: AppTheme.grey.withOpacity(0.5), fontSize: 12, letterSpacing: 0.5)))),
               ]),
             ),

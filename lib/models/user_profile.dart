@@ -5,7 +5,7 @@ class UserProfile {
   final int age;
   final double weight;
   final double height;
-  final String fitnessGoal; // comma-separated e.g. "Build Muscle, Lose Weight"
+  final String fitnessGoal;
   final String fitnessLevel;
 
   UserProfile({

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:http/http.dart' as http;
 
 class WorkoutPlan {
   final String title;
@@ -41,18 +41,35 @@ class PlanExercise {
   });
 }
 
-class GeminiService {
-  static const _apiKey = 'YOUR_GEMINI_API_KEY';
+class GroqService {
+  static const _apiKey = String.fromEnvironment('GROQ_API_KEY');
+  static const _model = 'llama-3.3-70b-versatile';
+  static const _baseUrl = 'https://api.groq.com/openai/v1/chat/completions';
 
-  late final GenerativeModel _model;
-
-  GeminiService() {
-    _model = GenerativeModel(
-      model: 'gemini-1.5-flash',
-      apiKey: _apiKey,
+  Future<String> _callGroq(String prompt) async {
+    final response = await http.post(
+      Uri.parse(_baseUrl),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $_apiKey',
+      },
+      body: jsonEncode({
+        'model': _model,
+        'messages': [
+          {'role': 'user', 'content': prompt},
+        ],
+        'max_tokens': 1500,
+        'temperature': 0.7,
+      }),
     );
-  }
 
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return data['choices'][0]['message']['content'] ?? '';
+    } else {
+      throw Exception('Groq API error: ${response.statusCode}');
+    }
+  }
 
   Future<WorkoutPlan> generateWorkoutPlan({
     required String fitnessLevel,
@@ -91,8 +108,7 @@ Respond ONLY with valid JSON in this exact format, no markdown, no extra text:
 ''';
 
     try {
-      final response = await _model.generateContent([Content.text(prompt)]);
-      final text = response.text ?? '';
+      final text = await _callGroq(prompt);
       final jsonStr = text
           .replaceAll('```json', '')
           .replaceAll('```', '')
@@ -132,9 +148,10 @@ Respond ONLY with valid JSON in this exact format, no markdown, no extra text:
     final prompt =
         'Give one short actionable tip (max 20 words) for perfect $exerciseName form. No markdown.';
     try {
-      final response = await _model.generateContent([Content.text(prompt)]);
-      return response.text?.trim() ??
-          'Focus on controlled movement and proper breathing.';
+      final text = await _callGroq(prompt);
+      return text.trim().isNotEmpty
+          ? text.trim()
+          : 'Focus on controlled movement and proper breathing.';
     } catch (_) {
       return 'Focus on controlled movement and proper breathing.';
     }
