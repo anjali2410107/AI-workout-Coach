@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'bloc/posture/posture_bloc.dart';
 import 'screens/splash_screen.dart';
 import 'theme/app_theme.dart';
 import 'bloc/navigation/navigation_bloc.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => ChatBloc()..add(ChatInitialized())),
         BlocProvider(create: (_) => WorkoutPlanBloc()),
         BlocProvider(create: (_) => ProgressBloc()..add(ProgressLoaded())),
+        BlocProvider(create: (_) => PostureBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
