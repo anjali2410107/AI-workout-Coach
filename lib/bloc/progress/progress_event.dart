@@ -4,7 +4,6 @@ abstract class ProgressEvent {}
 
 class ProgressLoaded extends ProgressEvent {}
 
-// WorkoutTimer events
 class TimerSetupChanged extends ProgressEvent {
   final int? totalSets;
   final int? repsPerSet;

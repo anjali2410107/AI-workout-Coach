@@ -4,7 +4,6 @@ enum ProgressStatus { initial, loading, loaded, error }
 enum TimerStatus { active, resting, finished }
 
 class ProgressState {
-  // Progress screen data
   final ProgressStatus status;
   final List<WorkoutSession> sessions;
   final int streak;
@@ -12,7 +11,6 @@ class ProgressState {
   final Map<String, int> weeklyChart;
   final String error;
 
-  // Workout timer data
   final TimerStatus timerStatus;
   final int totalSets;
   final int repsPerSet;

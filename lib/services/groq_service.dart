@@ -71,7 +71,6 @@ class GroqService {
     }
   }
 
-  // ✅ NEW: Real AI posture analysis — called every 3 seconds with live angle data
   Future<List<String>> analyzePosture({
     required String exerciseName,
     required Map<String, double> angles,

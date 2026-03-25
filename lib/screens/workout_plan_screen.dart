@@ -24,7 +24,6 @@ class WorkoutPlanScreen extends StatelessWidget {
             padding: const EdgeInsets.all(20),
             child:
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              // Header banner
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -60,7 +59,6 @@ class WorkoutPlanScreen extends StatelessWidget {
 
               const SizedBox(height: 24),
 
-              // Fitness level
               _SectionLabel(label: 'Fitness Level'),
               const SizedBox(height: 10),
               Row(
@@ -81,7 +79,6 @@ class WorkoutPlanScreen extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              // Goal
               _SectionLabel(label: 'Your Goal'),
               const SizedBox(height: 10),
               Wrap(
@@ -100,7 +97,6 @@ class WorkoutPlanScreen extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              // Days per week
               _SectionLabel(label: 'Days per Week: ${state.daysPerWeek}'),
               Slider(
                 value: state.daysPerWeek.toDouble(),
@@ -114,7 +110,6 @@ class WorkoutPlanScreen extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              // Focus areas
               _SectionLabel(label: 'Focus Areas'),
               const SizedBox(height: 10),
               Wrap(
@@ -133,7 +128,6 @@ class WorkoutPlanScreen extends StatelessWidget {
 
               const SizedBox(height: 28),
 
-              // Generate button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
@@ -154,7 +148,6 @@ class WorkoutPlanScreen extends StatelessWidget {
 
               const SizedBox(height: 28),
 
-              // Plan output
               if (state.plan != null) ...[
                 Container(
                   padding: const EdgeInsets.all(16),

@@ -26,7 +26,6 @@ class ProfileScreen extends StatelessWidget {
                     MaterialPageRoute(
                         builder: (_) => const ProfileSetupScreen()),
                   );
-                  // Reload profile after editing
                   if (context.mounted) {
                     context.read<ProfileBloc>().add(ProfileLoaded());
                   }

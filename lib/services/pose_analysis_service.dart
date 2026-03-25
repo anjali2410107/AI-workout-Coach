@@ -124,13 +124,11 @@ class PoseAnalysisService {
       }
     }
 
-    // ✅ Trigger AI call in background with live angle data
     _callAIIfNeeded(
       exerciseName: 'Squat',
       angles: {'Knee angle': kneeAngle, 'Back angle': backAngle},
     );
 
-    // Instant feedback (every frame)
     if (kneeAngle > 160) {
       feedback.add(const PostureFeedback(
           message: 'Go deeper — bend your knees more',
@@ -155,7 +153,6 @@ class PoseAnalysisService {
           isCorrect: true, severity: 'good'));
     }
 
-    // ✅ AI feedback shown below — updates every 3 seconds
     feedback.addAll(_aiFeedback);
     return feedback;
   }
@@ -181,7 +178,6 @@ class PoseAnalysisService {
     final elbowAngle = calculateAngle(leftShoulder!, leftElbow!, leftWrist!);
     final bodyAngle  = calculateAngle(leftShoulder, leftHip!, leftAnkle!);
 
-    // Rep counting state machine
     if (_repPhase == 'idle' || _repPhase == 'up') {
       if (elbowAngle < 90) {
         _repPhase = 'down';
@@ -195,13 +191,11 @@ class PoseAnalysisService {
       }
     }
 
-    // ✅ Trigger AI call in background with live angle data
     _callAIIfNeeded(
       exerciseName: 'Push-up',
       angles: {'Elbow angle': elbowAngle, 'Body alignment': bodyAngle},
     );
 
-    // Instant feedback
     if (elbowAngle < 90) {
       feedback.add(const PostureFeedback(
           message: 'Good depth — push back up! ✅',
@@ -230,7 +224,6 @@ class PoseAnalysisService {
           isCorrect: true, severity: 'good'));
     }
 
-    // ✅ AI feedback
     feedback.addAll(_aiFeedback);
     return feedback;
   }
@@ -253,13 +246,11 @@ class PoseAnalysisService {
 
     final bodyAngle = calculateAngle(leftShoulder!, leftHip!, leftAnkle!);
 
-    // ✅ Trigger AI call in background
     _callAIIfNeeded(
       exerciseName: 'Plank',
       angles: {'Body alignment angle': bodyAngle},
     );
 
-    // Instant feedback
     if (bodyAngle >= 165 && bodyAngle <= 195) {
       feedback.add(const PostureFeedback(
           message: 'Perfect plank alignment! ✅',
@@ -274,7 +265,6 @@ class PoseAnalysisService {
           isCorrect: false, severity: 'error'));
     }
 
-    // ✅ AI feedback
     feedback.addAll(_aiFeedback);
     return feedback;
   }
@@ -296,7 +286,6 @@ class PoseAnalysisService {
 
     final elbowAngle = calculateAngle(leftShoulder!, leftElbow!, leftWrist!);
 
-    // Rep counting state machine
     if (_repPhase == 'idle' || _repPhase == 'up') {
       if (elbowAngle > 150) {
         _repPhase = 'down';
@@ -310,13 +299,11 @@ class PoseAnalysisService {
       }
     }
 
-    // ✅ Trigger AI call in background
     _callAIIfNeeded(
       exerciseName: 'Bicep Curl',
       angles: {'Elbow angle': elbowAngle},
     );
 
-    // Instant feedback
     if (elbowAngle < 50) {
       feedback.add(const PostureFeedback(
           message: 'Good curl! Lower with control ✅',
@@ -331,7 +318,6 @@ class PoseAnalysisService {
           isCorrect: true, severity: 'good'));
     }
 
-    // ✅ AI feedback
     feedback.addAll(_aiFeedback);
     return feedback;
   }

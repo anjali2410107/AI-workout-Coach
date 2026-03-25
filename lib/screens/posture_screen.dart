@@ -56,7 +56,6 @@ class _PostureScreenState extends State<PostureScreen> {
     await _cameraCtrl!.initialize();
     if (!mounted) return;
 
-    // Notify BLoC that camera is ready
     context.read<PostureBloc>().add(PostureCameraInitialized());
     _cameraCtrl!.startImageStream(_processFrame);
   }
@@ -194,7 +193,6 @@ class _PostureScreenState extends State<PostureScreen> {
                               color: AppTheme.primary)),
                     ),
 
-                  // Rep counter
                   Positioned(
                     top: 16, right: 16,
                     child: Container(
@@ -222,7 +220,6 @@ class _PostureScreenState extends State<PostureScreen> {
                     ),
                   ),
 
-                  // Live badge
                   Positioned(
                     top: 16, left: 16,
                     child: Container(
@@ -249,7 +246,6 @@ class _PostureScreenState extends State<PostureScreen> {
                     ),
                   ),
 
-                  // Person lost warning
                   if (!state.personDetected && state.cameraReady)
                     Positioned(
                       bottom: 16, left: 16, right: 16,
@@ -281,7 +277,6 @@ class _PostureScreenState extends State<PostureScreen> {
               ),
             ),
 
-            // Feedback panel
             Expanded(
               flex: 4,
               child: Padding(
