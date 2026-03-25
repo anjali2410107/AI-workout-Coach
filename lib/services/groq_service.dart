@@ -46,7 +46,7 @@ class GroqService {
   static const _model = 'llama-3.3-70b-versatile';
   static const _baseUrl = 'https://api.groq.com/openai/v1/chat/completions';
 
-  Future<String> _callGroq(String prompt) async {
+  Future<String> _callGroq(String prompt, {int maxTokens = 1500}) async {
     final response = await http.post(
       Uri.parse(_baseUrl),
       headers: {
@@ -58,7 +58,7 @@ class GroqService {
         'messages': [
           {'role': 'user', 'content': prompt},
         ],
-        'max_tokens': 1500,
+        'max_tokens': maxTokens,
         'temperature': 0.7,
       }),
     );
@@ -68,6 +68,47 @@ class GroqService {
       return data['choices'][0]['message']['content'] ?? '';
     } else {
       throw Exception('Groq API error: ${response.statusCode}');
+    }
+  }
+
+  // ✅ NEW: Real AI posture analysis — called every 3 seconds with live angle data
+  Future<List<String>> analyzePosture({
+    required String exerciseName,
+    required Map<String, double> angles,
+    required int repCount,
+    required String currentPhase,
+  }) async {
+    final angleDescription = angles.entries
+        .map((e) => '${e.key}: ${e.value.toStringAsFixed(1)}°')
+        .join(', ');
+
+    final prompt = '''
+You are a real-time AI fitness coach analyzing a person doing $exerciseName.
+
+Current measurements:
+- Joint angles: $angleDescription
+- Reps completed: $repCount
+- Current phase: $currentPhase
+
+Give exactly 2 short coaching tips (max 12 words each) based on these exact angle values.
+Be specific — mention the actual angle numbers if relevant.
+Be encouraging but honest about form issues.
+
+Respond ONLY as a JSON array of 2 strings, no markdown, no extra text:
+["tip one here", "tip two here"]
+''';
+
+    try {
+      final text = await _callGroq(prompt, maxTokens: 200);
+      final jsonStr = text
+          .replaceAll('```json', '')
+          .replaceAll('```', '')
+          .trim();
+
+      final List<dynamic> tips = jsonDecode(jsonStr);
+      return tips.map((t) => t.toString()).toList();
+    } catch (_) {
+      return ['Focus on controlled movement 💪', 'Breathe steadily throughout'];
     }
   }
 
