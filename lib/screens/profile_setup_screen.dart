@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/profile/profile_bloc.dart';
+import '../models/user_profile.dart';
 import '../theme/app_theme.dart';
 import 'main_scaffold.dart';
 
 class ProfileSetupScreen extends StatefulWidget {
-  const ProfileSetupScreen({super.key});
-
+  final UserProfile? profile;
+  const ProfileSetupScreen({super.key, this.profile});
   @override
   State<ProfileSetupScreen> createState() => _ProfileSetupScreenState();
 }
@@ -22,7 +23,27 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
     'Stay Active', 'Increase Flexibility'
   ];
   final _levels = ['Beginner', 'Intermediate', 'Advanced'];
+  @override
+  void initState() {
+    super.initState();
 
+    if (widget.profile != null) {
+      final p = widget.profile!;
+
+      _nameController.text = p.name;
+
+      context.read<ProfileBloc>().add(ProfileSetupNameChanged(p.name));
+      context.read<ProfileBloc>().add(ProfileSetupAgeChanged(p.age));
+      context.read<ProfileBloc>().add(ProfileSetupWeightChanged(p.weight));
+      context.read<ProfileBloc>().add(ProfileSetupHeightChanged(p.height));
+      context.read<ProfileBloc>().add(ProfileSetupLevelChanged(p.fitnessLevel));
+      context.read<ProfileBloc>().add(ProfileSetupStepChanged(3));
+      final goals = p.fitnessGoal.split(', ');
+      for (var g in goals) {
+        context.read<ProfileBloc>().add(ProfileSetupGoalToggled(g));
+      }
+    }
+  }
   @override
   void dispose() {
     _nameController.dispose();

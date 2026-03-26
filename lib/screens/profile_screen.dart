@@ -24,7 +24,7 @@ class ProfileScreen extends StatelessWidget {
                   await Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => const ProfileSetupScreen()),
+                      builder: (_) => ProfileSetupScreen(profile: profile),                    ),
                   );
                   if (context.mounted) {
                     context.read<ProfileBloc>().add(ProfileLoaded());
