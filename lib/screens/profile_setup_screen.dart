@@ -24,6 +24,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
   ];
   final _levels = ['Beginner', 'Intermediate', 'Advanced'];
   @override
+  @override
   void initState() {
     super.initState();
 
@@ -37,14 +38,19 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
       context.read<ProfileBloc>().add(ProfileSetupWeightChanged(p.weight));
       context.read<ProfileBloc>().add(ProfileSetupHeightChanged(p.height));
       context.read<ProfileBloc>().add(ProfileSetupLevelChanged(p.fitnessLevel));
-      context.read<ProfileBloc>().add(ProfileSetupStepChanged(3));
+
       final goals = p.fitnessGoal.split(', ');
       for (var g in goals) {
         context.read<ProfileBloc>().add(ProfileSetupGoalToggled(g));
       }
+
+      Future.microtask(() {
+        _pageController.jumpToPage(3);
+      });
+
+      context.read<ProfileBloc>().add(ProfileSetupStepChanged(3));
     }
-  }
-  @override
+  }  @override
   void dispose() {
     _nameController.dispose();
     _pageController.dispose();
