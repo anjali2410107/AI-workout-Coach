@@ -8,6 +8,7 @@ import '../models/exercise_model.dart';
 import '../services/pose_analysis_service.dart';
 import '../bloc/posture/posture_bloc.dart';
 import '../theme/app_theme.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 class PostureScreen extends StatefulWidget {
   final Exercise exercise;
@@ -21,7 +22,9 @@ class _PostureScreenState extends State<PostureScreen> {
   CameraController? _cameraCtrl;
   PoseDetector? _poseDetector;
   final _analysisService = PoseAnalysisService();
-
+  final FlutterTts _tts = FlutterTts();
+  String _lastSpoken = "";
+  DateTime _lastSpokenTime = DateTime.now();
   bool _isDetecting = false;
   DateTime? _startTime;
   static const double _minConfidence = 0.5;
@@ -139,24 +142,42 @@ class _PostureScreenState extends State<PostureScreen> {
   }
 
   @override
+  @override
   void dispose() {
+    _tts.stop();
+
     _cameraCtrl?.stopImageStream();
     _cameraCtrl?.dispose();
     _poseDetector?.close();
-    context.read<PostureBloc>().add(PostureReset());
+
+    if (mounted) {
+      context.read<PostureBloc>().add(PostureReset());
+    }
+
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<PostureBloc, PostureState>(
       listener: (context, state) async {
+        if (state.feedback.isNotEmpty) {
+          final message = state.feedback.first.message;
+
+          if (message != _lastSpoken &&
+              DateTime.now().difference(_lastSpokenTime).inSeconds > 2) {
+
+            _lastSpoken = message;
+            _lastSpokenTime = DateTime.now();
+
+            await _tts.speak(message);
+          }
+        }
+
         if (state.status == PostureStatus.finished && state.workoutSaved) {
           await _showCompletionDialog(context, state);
           if (context.mounted) Navigator.pop(context);
         }
-      },
-      builder: (context, state) {
+      },      builder: (context, state) {
         return Scaffold(
           backgroundColor: AppTheme.bgDark,
           appBar: AppBar(
