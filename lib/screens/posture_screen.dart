@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:camera/camera.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 import 'dart:typed_data';
-
+import 'package:flutter_tts/flutter_tts.dart';
 import '../models/exercise_model.dart';
 import '../services/pose_analysis_service.dart';
 import '../bloc/posture/posture_bloc.dart';
@@ -21,6 +21,9 @@ class _PostureScreenState extends State<PostureScreen> {
   CameraController? _cameraCtrl;
   PoseDetector? _poseDetector;
   final _analysisService = PoseAnalysisService();
+  final FlutterTts _tts = FlutterTts();
+  String _lastSpoken = "";
+  DateTime _lastSpokenTime = DateTime.now();
 
   bool _isDetecting = false;
   DateTime? _startTime;
@@ -139,18 +142,37 @@ class _PostureScreenState extends State<PostureScreen> {
   }
 
   @override
+  @override
   void dispose() {
+    _tts.stop();
+
     _cameraCtrl?.stopImageStream();
     _cameraCtrl?.dispose();
     _poseDetector?.close();
-    context.read<PostureBloc>().add(PostureReset());
+
+    if (mounted) {
+      context.read<PostureBloc>().add(PostureReset());
+    }
+
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<PostureBloc, PostureState>(
       listener: (context, state) async {
+        if (state.feedback.isNotEmpty) {
+          final message = state.feedback.first.message;
+
+          if (message != _lastSpoken &&
+              DateTime.now().difference(_lastSpokenTime).inSeconds > 2) {
+
+            _lastSpoken = message;
+            _lastSpokenTime = DateTime.now();
+
+            await _tts.speak(message);
+          }
+        }
+
         if (state.status == PostureStatus.finished && state.workoutSaved) {
           await _showCompletionDialog(context, state);
           if (context.mounted) Navigator.pop(context);
@@ -182,7 +204,8 @@ class _PostureScreenState extends State<PostureScreen> {
                   bottomLeft: Radius.circular(24),
                   bottomRight: Radius.circular(24),
                 ),
-                child: Stack(fit: StackFit.expand, children: [
+                child:
+                Stack(fit: StackFit.expand, children: [
                   if (state.cameraReady && _cameraCtrl != null)
                     CameraPreview(_cameraCtrl!)
                   else
@@ -271,9 +294,19 @@ class _PostureScreenState extends State<PostureScreen> {
                                     fontWeight: FontWeight.w600)),
                           ],
                         ),
+
                       ),
                     ),
-                ]),
+
+                  Positioned.fill(
+                    child: Center(
+                      child: state.feedback.isNotEmpty
+                          ? _BigFeedbackOverlay(feedback: state.feedback.first)
+                          : const SizedBox(),
+                    ),
+                  ),
+
+                     ]),
               ),
             ),
 
@@ -400,6 +433,44 @@ class _ResultRow extends StatelessWidget {
                     color: AppTheme.white,
                     fontWeight: FontWeight.w700)),
           ]),
+    );
+  }
+}
+
+class _BigFeedbackOverlay extends StatelessWidget {
+  final PostureFeedback feedback;
+
+  const _BigFeedbackOverlay({required this.feedback});
+
+  @override
+  Widget build(BuildContext context) {
+    Color color;
+
+    if (feedback.severity == 'good') {
+      color = Colors.green;
+    } else if (feedback.severity == 'error') {
+      color = Colors.redAccent;
+    } else {
+      color = Colors.orange;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.6),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: color.withOpacity(0.6), width: 2),
+      ),
+      child: Text(
+        feedback.message.toUpperCase(),
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: color,
+          fontSize: 26,
+          fontWeight: FontWeight.w900,
+          letterSpacing: 1.2,
+        ),
+      ),
     );
   }
 }
