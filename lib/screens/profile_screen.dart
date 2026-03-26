@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/profile/profile_bloc.dart';
 import '../models/user_profile.dart';
 import '../theme/app_theme.dart';
+import 'edit_profile_screen.dart';
 import 'profile_setup_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -21,10 +22,12 @@ class ProfileScreen extends StatelessWidget {
             actions: [
               TextButton.icon(
                 onPressed: () async {
+                  if (profile == null) return;
                   await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => ProfileSetupScreen(profile: profile),                    ),
+                      builder: (_) => EditProfileScreen(profile: profile),
+                    )
                   );
                   if (context.mounted) {
                     context.read<ProfileBloc>().add(ProfileLoaded());
