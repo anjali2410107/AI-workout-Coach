@@ -70,7 +70,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         child: Column(
           children: [
 
-            // 🔹 NAME
             _buildCard(
               child: TextField(
                 controller: nameController,
@@ -84,7 +83,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
             const SizedBox(height: 12),
 
-            // 🔹 AGE
             _buildCard(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -109,7 +107,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
             const SizedBox(height: 12),
 
-            // 🔹 WEIGHT
             _buildCard(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,7 +126,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
             const SizedBox(height: 12),
 
-            // 🔹 HEIGHT
             _buildCard(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,7 +145,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
             const SizedBox(height: 12),
 
-            // 🔹 LEVEL
             _buildCard(
               child: DropdownButton<String>(
                 value: level,
@@ -167,7 +162,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
             const SizedBox(height: 12),
 
-            // 🔹 GOALS
             _buildCard(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -189,7 +183,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
             const SizedBox(height: 20),
 
-            // 🔥 SAVE BUTTON
             ElevatedButton(
               onPressed: _save,
               child: const Text('Save Changes'),

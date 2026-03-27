@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-
 import '../models/exercise_model.dart';
 import '../theme/app_theme.dart';
 import 'posture_screen.dart';
+import 'exercise_tutorial_screen.dart';
 
 class ExerciseLibraryScreen extends StatefulWidget {
   const ExerciseLibraryScreen({super.key});
@@ -30,7 +30,6 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
         backgroundColor: AppTheme.bgDark,
       ),
       body: Column(children: [
-
         SizedBox(
           height: 50,
           child: ListView.builder(
@@ -49,8 +48,7 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
                   decoration: BoxDecoration(
                     color: active ? AppTheme.primary : AppTheme.card,
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                        color: active ? AppTheme.primary : AppTheme.border),
+                    border: Border.all(color: active ? AppTheme.primary : AppTheme.border),
                   ),
                   child: Text(cat,
                     style: TextStyle(
@@ -142,15 +140,34 @@ class _ExerciseCard extends StatelessWidget {
 
           const SizedBox(height: 12),
 
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton.icon(
-              onPressed: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => PostureScreen(exercise: exercise))),
-              icon: const Icon(Icons.videocam_rounded, size: 18),
-              label: const Text('Start with AI Coach'),
+          Row(children: [
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(
+                        builder: (_) => ExerciseTutorialScreen(exercise: exercise))),
+                icon: const Icon(Icons.play_lesson_rounded, size: 16),
+                label: const Text('Tutorial'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppTheme.primary,
+                  side: BorderSide(color: AppTheme.primary.withOpacity(0.5)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+              ),
             ),
-          ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: ElevatedButton.icon(
+                onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => PostureScreen(exercise: exercise))),
+                icon: const Icon(Icons.videocam_rounded, size: 16),
+                label: const Text('Start'),
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+              ),
+            ),
+          ]),
         ]),
       ),
     );
@@ -185,14 +202,36 @@ class _ExerciseCard extends StatelessWidget {
                 _InfoChip(label: '${exercise.defaultReps} Reps'),
               ]),
               const SizedBox(height: 20),
-              SizedBox(width: double.infinity, child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => PostureScreen(exercise: exercise)));
-                },
-                child: const Text('Start with AI Coach'),
-              )),
+
+              Row(children: [
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (_) => ExerciseTutorialScreen(exercise: exercise)));
+                    },
+                    icon: const Icon(Icons.play_lesson_rounded, size: 16),
+                    label: const Text('View Tutorial'),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppTheme.primary,
+                      side: BorderSide(color: AppTheme.primary.withOpacity(0.5)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => PostureScreen(exercise: exercise)));
+                    },
+                    child: const Text('Start'),
+                  ),
+                ),
+              ]),
             ]),
       ),
     );
